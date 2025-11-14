@@ -1,4 +1,3 @@
-# data_loader.py
 """
 Modul untuk memuat gambar dan label NPK dari folder dan file CSV.
 """

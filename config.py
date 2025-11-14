@@ -1,4 +1,3 @@
-# config.py
 """
 File konfigurasi untuk menyimpan semua variabel global dan hyperparameter.
 """
@@ -17,10 +16,10 @@ NUM_CHANNELS = 3
 
 # --- Konfigurasi Pelatihan Model ---
 # Hyperparameter yang akan digunakan untuk melatih 'head' CNN atau seluruh CustomCNN
-COMMON_EPOCHS = 30
+COMMON_EPOCHS = 10
 COMMON_BATCH_SIZE = 32
 COMMON_LEARNING_RATE = 0.001
-COMMON_DROPOUT_RATE = 0.3
+COMMON_DROPOUT_RATE = 0.25
 
 # --- Konfigurasi Arsitektur ---
 # Ganti list ini untuk melatih arsitektur yang berbeda.

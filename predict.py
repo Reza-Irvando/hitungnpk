@@ -37,7 +37,7 @@ def predict_npk(image_path, architecture_name):
     Args:
         image_path (str): Path ke file gambar.
         architecture_name (str): Nama arsitektur model yang akan digunakan
-                                 ("CustomCNN", "VGG16", dll.).
+                                ("CustomCNN", "VGG16", dll.).
 
     Returns:
         dict: Berisi nilai prediksi untuk N, P, dan K.
