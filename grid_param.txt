@@ -215,7 +215,23 @@ Test MAPE for Kalium (K) (VGG16): 34.21%
 ---
 
 ResNet50
+Best hyperparameters for Nitrogen (N) (ResNet50): {'C': 0.1, 'epsilon': 0.1, 'gamma': 0.1, 'kernel': 'poly'}
+Test MAE for Nitrogen (N) (ResNet50): 3891.7450
+Test MSE for Nitrogen (N) (ResNet50): 16357588.9184
+Test RMSE for Nitrogen (N) (ResNet50): 4044.4516
+Test MAPE for Nitrogen (N) (ResNet50): 44.78%
 
+Best hyperparameters for Fosfor (P) (ResNet50): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.001, 'kernel': 'linear'}
+Test MAE for Fosfor (P) (ResNet50): 5.5717
+Test MSE for Fosfor (P) (ResNet50): 41.9970
+Test RMSE for Fosfor (P) (ResNet50): 6.4805
+Test MAPE for Fosfor (P) (ResNet50): 22.91%
+
+Best hyperparameters for Kalium (K) (ResNet50): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+Test MAE for Kalium (K) (ResNet50): 0.0196
+Test MSE for Kalium (K) (ResNet50): 0.0004
+Test RMSE for Kalium (K) (ResNet50): 0.0198
+Test MAPE for Kalium (K) (ResNet50): 34.21%
 
 ---
 

@@ -1,3 +1,7 @@
+"""
+Skrip utama untuk melatih feature extractor CNN dan model SVR.
+Menyimpan model yang telah dilatih, scaler, dan menghasilkan plot evaluasi.
+"""
 import os
 import numpy as np
 import pandas as pd
@@ -10,7 +14,7 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Input,
 from tensorflow.keras.optimizers import Adam
 from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV, KFold
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error  # <-- DITAMBAHKAN
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.preprocessing import StandardScaler
 
 # Import dari file lokal
@@ -150,7 +154,6 @@ def build_and_train_feature_extractor(base_model_name, X_train_raw, y_train_raw,
     
     return feature_extractor, preprocess_input_fn, history
 
-# --- PERUBAHAN FUNGSI INI ---
 def train_and_evaluate_svr_with_tuning(X_train_feats, y_train_tgt, X_test_feats, y_test_tgt, target_name, arch_name):
     print(f"\n--- Training SVR for {target_name} ({arch_name}) with Hyperparameter Tuning ---")
     svr = SVR()
@@ -190,7 +193,6 @@ def train_and_evaluate_svr_with_tuning(X_train_feats, y_train_tgt, X_test_feats,
     
     return best_svr_model, metrics
 
-# --- FUNGSI HELPER BARU UNTUK PLOTTING ---
 def plot_metric_comparison(all_metrics_data, metric_key, metric_title, file_name, y_label):
     """
     Membuat bar plot perbandingan untuk satu metrik (MAE, MSE, RMSE, MAPE).
@@ -265,7 +267,10 @@ def main():
     print(f"Ukuran Input Gambar  : ({config.IMAGE_HEIGHT}, {config.IMAGE_WIDTH}, {config.NUM_CHANNELS})")
     print("="*70 + "\n")
 
-    all_models_metrics = {} # <-- Diganti dari all_models_mape
+    # --- BARIS BARU: BUAT STRING UNTUK NAMA FILE ---
+    lr_str = f"lr_{config.COMMON_LEARNING_RATE}"
+
+    all_models_metrics = {}
     all_cnn_histories = {}
 
     # 2. Loop melalui setiap arsitektur
@@ -279,7 +284,8 @@ def main():
         all_cnn_histories[arch_name] = history
         
         # Simpan model CNN
-        cnn_model_path = os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_feature_extractor.keras")
+        # --- NAMA FILE DIMODIFIKASI ---
+        cnn_model_path = os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_feature_extractor_{lr_str}.keras")
         cnn_extractor.save(cnn_model_path)
         print(f"Model feature extractor {arch_name} disimpan di: {cnn_model_path}")
         
@@ -293,35 +299,39 @@ def main():
         scaler = StandardScaler()
         X_train_features_scaled = scaler.fit_transform(X_train_features)
         X_test_features_scaled = scaler.transform(X_test_features)
-        scaler_path = os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_scaler.joblib")
+        # --- NAMA FILE DIMODIFIKASI ---
+        scaler_path = os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_scaler_{lr_str}.joblib")
         joblib.dump(scaler, scaler_path)
         print(f"Scaler untuk {arch_name} disimpan di: {scaler_path}")
         
         # 6. Latih, evaluasi, dan SIMPAN model SVR
-        current_model_metrics = {} # <-- Diganti dari current_model_mape
+        current_model_metrics = {}
         
         # SVR untuk Nitrogen (N)
-        svr_n, metrics_n = train_and_evaluate_svr_with_tuning( # <-- Diubah
+        svr_n, metrics_n = train_and_evaluate_svr_with_tuning(
             X_train_features_scaled, y_train[:, 0], X_test_features_scaled, y_test[:, 0], "Nitrogen (N)", arch_name
         )
-        joblib.dump(svr_n, os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_svr_n.joblib"))
-        current_model_metrics["Nitrogen (N)"] = metrics_n # <-- Diubah
+        # --- NAMA FILE DIMODIFIKASI ---
+        joblib.dump(svr_n, os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_svr_n_{lr_str}.joblib"))
+        current_model_metrics["Nitrogen (N)"] = metrics_n
         
         # SVR untuk Fosfor (P)
-        svr_p, metrics_p = train_and_evaluate_svr_with_tuning( # <-- Diubah
+        svr_p, metrics_p = train_and_evaluate_svr_with_tuning(
             X_train_features_scaled, y_train[:, 1], X_test_features_scaled, y_test[:, 1], "Fosfor (P)", arch_name
         )
-        joblib.dump(svr_p, os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_svr_p.joblib"))
-        current_model_metrics["Fosfor (P)"] = metrics_p # <-- Diubah
+        # --- NAMA FILE DIMODIFIKASI ---
+        joblib.dump(svr_p, os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_svr_p_{lr_str}.joblib"))
+        current_model_metrics["Fosfor (P)"] = metrics_p
         
         # SVR untuk Kalium (K)
-        svr_k, metrics_k = train_and_evaluate_svr_with_tuning( # <-- Diubah
+        svr_k, metrics_k = train_and_evaluate_svr_with_tuning(
             X_train_features_scaled, y_train[:, 2], X_test_features_scaled, y_test[:, 2], "Kalium (K)", arch_name
         )
-        joblib.dump(svr_k, os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_svr_k.joblib"))
-        current_model_metrics["Kalium (K)"] = metrics_k # <-- Diubah
+        # --- NAMA FILE DIMODIFIKASI ---
+        joblib.dump(svr_k, os.path.join(config.MODEL_SAVE_DIR, f"{arch_name}_svr_k_{lr_str}.joblib"))
+        current_model_metrics["Kalium (K)"] = metrics_k
 
-        all_models_metrics[arch_name] = current_model_metrics # <-- Diubah
+        all_models_metrics[arch_name] = current_model_metrics
 
     # 7. Plot dan tampilkan hasil evaluasi
     # Plotting Loss
@@ -334,10 +344,10 @@ def main():
         plt.ylabel('Loss (MSE)')
         plt.legend()
         plt.grid(True)
-        plt.savefig(f"{arch_name}_training_loss.png") # Simpan plot
+        # --- NAMA FILE DIMODIFIKASI ---
+        plt.savefig(f"{arch_name}_training_loss_{lr_str}.png") # Simpan plot
         plt.show()
 
-    # --- BLOK PLOTTING BARU ---
     # Plotting Perbandingan Metrik (MAPE, MAE, MSE, RMSE)
     if all_models_metrics:
         
@@ -345,28 +355,28 @@ def main():
         plot_metric_comparison(all_models_metrics, 
                             metric_key='mape', 
                             metric_title='MAPE', 
-                            file_name="mape_comparison.png", 
+                            file_name=f"mape_comparison_{lr_str}.png", # <-- DIMODIFIKASI
                             y_label='MAPE (%)')
 
         # Plotting Perbandingan MAE
         plot_metric_comparison(all_models_metrics, 
                             metric_key='mae', 
                             metric_title='MAE', 
-                            file_name="mae_comparison.png", 
+                            file_name=f"mae_comparison_{lr_str}.png", # <-- DIMODIFIKASI
                             y_label='MAE')
 
         # Plotting Perbandingan MSE
         plot_metric_comparison(all_models_metrics, 
                             metric_key='mse', 
                             metric_title='MSE', 
-                            file_name="mse_comparison.png", 
+                            file_name=f"mse_comparison_{lr_str}.png", # <-- DIMODIFIKASI
                             y_label='MSE')
 
         # Plotting Perbandingan RMSE
         plot_metric_comparison(all_models_metrics, 
                             metric_key='rmse', 
                             metric_title='RMSE', 
-                            file_name="rmse_comparison.png", 
+                            file_name=f"rmse_comparison_{lr_str}.png", # <-- DIMODIFIKASI
                             y_label='RMSE')
 
 if __name__ == '__main__':
