@@ -18,13 +18,13 @@ NUM_CHANNELS = 3
 # Hyperparameter yang akan digunakan untuk melatih 'head' CNN atau seluruh CustomCNN
 COMMON_EPOCHS = 10
 COMMON_BATCH_SIZE = 32
-COMMON_LEARNING_RATE = 0.001
+COMMON_LEARNING_RATE = 0.0001
 COMMON_DROPOUT_RATE = 0.25
 
 # --- Konfigurasi Arsitektur ---
 # Ganti list ini untuk melatih arsitektur yang berbeda.
 # Pilihan: ["CustomCNN", "VGG16", "ResNet50", "InceptionV3"]
-MODEL_ARCHITECTURES = ["CustomCNN", "VGG16", "ResNet50", "InceptionV3"]
+MODEL_ARCHITECTURES = ["ResNet50"]
 
 # --- Konfigurasi Split Data ---
 TRAIN_SPLIT = 0.6

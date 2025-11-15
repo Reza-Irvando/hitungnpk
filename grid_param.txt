@@ -173,17 +173,67 @@ Test MAPE for Kalium (K) (InceptionV3): 34.21%
 ## LR 0.0001
 
 CustomCNN
+Best hyperparameters for Nitrogen (N) (CustomCNN): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.1, 'kernel': 'poly'}
+Test MAE for Nitrogen (N) (CustomCNN): 3655.1538
+Test MSE for Nitrogen (N) (CustomCNN): 14995812.5163
+Test RMSE for Nitrogen (N) (CustomCNN): 3872.4427
+Test MAPE for Nitrogen (N) (CustomCNN): 39.76%
 
+Best hyperparameters for Fosfor (P) (CustomCNN): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.001, 'kernel': 'linear'}
+Test MAE for Fosfor (P) (CustomCNN): 7.9376
+Test MSE for Fosfor (P) (CustomCNN): 93.7781
+Test RMSE for Fosfor (P) (CustomCNN): 9.6839
+Test MAPE for Fosfor (P) (CustomCNN): 32.83%
+
+Best hyperparameters for Kalium (K) (CustomCNN): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+Test MAE for Kalium (K) (CustomCNN): 0.0196
+Test MSE for Kalium (K) (CustomCNN): 0.0004
+Test RMSE for Kalium (K) (CustomCNN): 0.0198
+Test MAPE for Kalium (K) (CustomCNN): 34.21%
 
 ---
 
 VGG16
+Best hyperparameters for Nitrogen (N) (VGG16): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.1, 'kernel': 'poly'}
+Test MAE for Nitrogen (N) (VGG16): 5937.2878
+Test MSE for Nitrogen (N) (VGG16): 165356539.1799
+Test RMSE for Nitrogen (N) (VGG16): 12859.1034
+Test MAPE for Nitrogen (N) (VGG16): 61.36%
 
+Best hyperparameters for Fosfor (P) (VGG16): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.001, 'kernel': 'linear'}
+Test MAE for Fosfor (P) (VGG16): 5.7154
+Test MSE for Fosfor (P) (VGG16): 55.6317
+Test RMSE for Fosfor (P) (VGG16): 7.4587
+Test MAPE for Fosfor (P) (VGG16): 23.85%
+
+Best hyperparameters for Kalium (K) (VGG16): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+Test MAE for Kalium (K) (VGG16): 0.0196
+Test MSE for Kalium (K) (VGG16): 0.0004
+Test RMSE for Kalium (K) (VGG16): 0.0198
+Test MAPE for Kalium (K) (VGG16): 34.21%
 
 ---
 
 ResNet50
 
+
 ---
 
 InceptionV3
+Best hyperparameters for Nitrogen (N) (InceptionV3): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.1, 'kernel': 'poly'}
+Test MAE for Nitrogen (N) (InceptionV3): 4153.2098
+Test MSE for Nitrogen (N) (InceptionV3): 18399231.7020
+Test RMSE for Nitrogen (N) (InceptionV3): 4289.4326
+Test MAPE for Nitrogen (N) (InceptionV3): 49.64%
+
+Best hyperparameters for Fosfor (P) (InceptionV3): {'C': 0.1, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'linear'}
+Test MAE for Fosfor (P) (InceptionV3): 5.5689
+Test MSE for Fosfor (P) (InceptionV3): 35.6715
+Test RMSE for Fosfor (P) (InceptionV3): 5.9726
+Test MAPE for Fosfor (P) (InceptionV3): 22.33%
+
+Best hyperparameters for Kalium (K) (InceptionV3): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+Test MAE for Kalium (K) (InceptionV3): 0.0196
+Test MSE for Kalium (K) (InceptionV3): 0.0004
+Test RMSE for Kalium (K) (InceptionV3): 0.0198
+Test MAPE for Kalium (K) (InceptionV3): 34.21%
