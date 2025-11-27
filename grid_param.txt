@@ -5,19 +5,19 @@ Best hyperparameters for Nitrogen (N) (CustomCNN): {'C': 0.001, 'epsilon': 0.1, 
 Test MAE for Nitrogen (N) (CustomCNN): 4100.0000
 Test MSE for Nitrogen (N) (CustomCNN): 17913333.2500
 Test RMSE for Nitrogen (N) (CustomCNN): 4232.4146
-Test MAPE for Nitrogen (N) (CustomCNN): 45.59%   
+Test MAPE for Nitrogen (N) (CustomCNN): 45.59%
 
 Best hyperparameters for Fosfor (P) (CustomCNN): {'C': 0.001, 'epsilon': 0.2, 'gamma': 0.001, 'kernel': 'rbf'}
 Test MAE for Fosfor (P) (CustomCNN): 7.0666
-Test MSE for Fosfor (P) (CustomCNN): 53.7974     
-Test RMSE for Fosfor (P) (CustomCNN): 7.3347     
-Test MAPE for Fosfor (P) (CustomCNN): 28.50%     
+Test MSE for Fosfor (P) (CustomCNN): 53.7974
+Test RMSE for Fosfor (P) (CustomCNN): 7.3347
+Test MAPE for Fosfor (P) (CustomCNN): 28.50%
 
 Best hyperparameters for Kalium (K) (CustomCNN): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
 Test MAE for Kalium (K) (CustomCNN): 0.0196
-Test MSE for Kalium (K) (CustomCNN): 0.0004      
-Test RMSE for Kalium (K) (CustomCNN): 0.0198     
-Test MAPE for Kalium (K) (CustomCNN): 34.21% 
+Test MSE for Kalium (K) (CustomCNN): 0.0004
+Test RMSE for Kalium (K) (CustomCNN): 0.0198
+Test MAPE for Kalium (K) (CustomCNN): 34.21%
 
 ---
 
@@ -26,18 +26,18 @@ Best hyperparameters for Nitrogen (N) (CustomCNN): {'C': 0.001, 'epsilon': 0.1, 
 Test MAE for Nitrogen (N) (CustomCNN): 4100.0000
 Test MSE for Nitrogen (N) (CustomCNN): 17913333.2500
 Test RMSE for Nitrogen (N) (CustomCNN): 4232.4146
-Test MAPE for Nitrogen (N) (CustomCNN): 45.59%   
+Test MAPE for Nitrogen (N) (CustomCNN): 45.59%
 
 Best hyperparameters for Fosfor (P) (CustomCNN): {'C': 0.001, 'epsilon': 0.2, 'gamma': 0.001, 'kernel': 'rbf'}
 Test MAE for Fosfor (P) (CustomCNN): 7.0666
-Test MSE for Fosfor (P) (CustomCNN): 53.7974     
-Test RMSE for Fosfor (P) (CustomCNN): 7.3347     
-Test MAPE for Fosfor (P) (CustomCNN): 28.50%     
+Test MSE for Fosfor (P) (CustomCNN): 53.7974
+Test RMSE for Fosfor (P) (CustomCNN): 7.3347
+Test MAPE for Fosfor (P) (CustomCNN): 28.50%
 
 Best hyperparameters for Kalium (K) (CustomCNN): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
 Test MAE for Kalium (K) (CustomCNN): 0.0196
-Test MSE for Kalium (K) (CustomCNN): 0.0004      
-Test RMSE for Kalium (K) (CustomCNN): 0.0198     
+Test MSE for Kalium (K) (CustomCNN): 0.0004
+Test RMSE for Kalium (K) (CustomCNN): 0.0198
 Test MAPE for Kalium (K) (CustomCNN): 34.21%
 
 ---

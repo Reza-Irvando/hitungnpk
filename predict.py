@@ -1,7 +1,3 @@
-# predict.py
-"""
-Skrip untuk memuat model yang telah dilatih dan membuat prediksi NPK pada gambar baru.
-"""
 import os
 import numpy as np
 import joblib
@@ -25,7 +21,7 @@ def get_preprocessing_function(architecture_name):
     elif architecture_name == "InceptionV3":
         return preprocess_input_inceptionv3
     elif architecture_name == "CustomCNN":
-        # CustomCNN kita hanya butuh normalisasi 0-1, yang sudah dilakukan saat load
+        # CustomCNN kita hanya butuh normalisasi 0-1
         return lambda x: x / 255.0
     else:
         raise ValueError(f"Arsitektur '{architecture_name}' tidak dikenali.")
@@ -33,6 +29,7 @@ def get_preprocessing_function(architecture_name):
 def predict_npk(image_path, architecture_name):
     """
     Memuat model yang telah dilatih dan memprediksi nilai NPK dari satu gambar.
+    Menggunakan extractor dan scaler terpisah untuk N, P, dan K.
 
     Args:
         image_path (str): Path ke file gambar.
@@ -43,30 +40,53 @@ def predict_npk(image_path, architecture_name):
         dict: Berisi nilai prediksi untuk N, P, dan K.
     """
     # 1. Tentukan path ke model-model yang disimpan
-    model_dir = config.MODEL_SAVE_DIR
-    cnn_path = os.path.join(model_dir, f"{architecture_name}_feature_extractor.keras")
-    scaler_path = os.path.join(model_dir, f"{architecture_name}_scaler.joblib")
-    svr_n_path = os.path.join(model_dir, f"{architecture_name}_svr_n.joblib")
-    svr_p_path = os.path.join(model_dir, f"{architecture_name}_svr_p.joblib")
-    svr_k_path = os.path.join(model_dir, f"{architecture_name}_svr_k.joblib")
+    model_dir = config.BEST_MODEL_DIR
+    
+    # Definisikan mapping untuk setiap unsur (N, P, K)
+    model_components = {}
+    elements = ['n', 'p', 'k']
+    
+    all_paths_exist = True
+    
+    for element in elements:
+        # Tentukan path untuk Extractor, Scaler, dan SVR
+        cnn_path = os.path.join(model_dir, f"{architecture_name}_feature_extractor_{element}.keras")
+        scaler_path = os.path.join(model_dir, f"{architecture_name}_scaler_{element}.joblib")
+        svr_path = os.path.join(model_dir, f"{architecture_name}_svr_{element}.joblib")
 
-    # Periksa apakah semua file model ada
-    for path in [cnn_path, scaler_path, svr_n_path, svr_p_path, svr_k_path]:
-        if not os.path.exists(path):
-            print(f"Error: File model tidak ditemukan di {path}")
-            print(f"Pastikan Anda telah menjalankan 'train.py' untuk arsitektur '{architecture_name}'.")
-            return None
+        # Periksa keberadaan file
+        for path in [cnn_path, scaler_path, svr_path]:
+            if not os.path.exists(path):
+                print(f"Error: File model tidak ditemukan di {path}")
+                print(f"Pastikan Anda telah menjalankan 'train.py' yang menghasilkan model per unsur untuk arsitektur '{architecture_name}'.")
+                all_paths_exist = False
+        
+        # Simpan path
+        model_components[element] = {
+            'cnn_path': cnn_path,
+            'scaler_path': scaler_path,
+            'svr_path': svr_path
+        }
+        
+    if not all_paths_exist:
+        return None
 
     # 2. Muat semua model dan scaler
     print("Memuat model...")
-    cnn_extractor = tf.keras.models.load_model(cnn_path)
-    scaler = joblib.load(scaler_path)
-    svr_n = joblib.load(svr_n_path)
-    svr_p = joblib.load(svr_p_path)
-    svr_k = joblib.load(svr_k_path)
-    print("Model berhasil dimuat.")
+    loaded_models = {}
+    try:
+        for element in elements:
+            paths = model_components[element]
+            loaded_models[f'cnn_{element}'] = tf.keras.models.load_model(paths['cnn_path'])
+            loaded_models[f'scaler_{element}'] = joblib.load(paths['scaler_path'])
+            loaded_models[f'svr_{element}'] = joblib.load(paths['svr_path'])
+        print("Model berhasil dimuat.")
+    except Exception as e:
+        print(f"Gagal memuat model: {e}")
+        return None
 
-    # 3. Muat dan proses gambar input
+
+    # 3. Muat dan proses gambar input (Preprocessing dasar tetap sama)
     try:
         img = tf.keras.preprocessing.image.load_img(
             image_path, target_size=(config.IMAGE_HEIGHT, config.IMAGE_WIDTH)
@@ -74,7 +94,7 @@ def predict_npk(image_path, architecture_name):
         img_array = tf.keras.preprocessing.image.img_to_array(img)
         img_array_expanded = np.expand_dims(img_array, axis=0)
         
-        # Dapatkan dan terapkan fungsi preprocessing yang benar
+        # Dapatkan fungsi preprocessing yang benar
         preprocess_fn = get_preprocessing_function(architecture_name)
         img_preprocessed = preprocess_fn(img_array_expanded)
 
@@ -82,19 +102,26 @@ def predict_npk(image_path, architecture_name):
         print(f"Gagal memuat atau memproses gambar: {e}")
         return None
 
-    # 4. Lakukan pipeline prediksi
-    # Ekstrak fitur menggunakan CNN
-    features = cnn_extractor.predict(img_preprocessed)
+    # 4. Lakukan pipeline prediksi (Iterasi per unsur)
+    predictions = {}
     
-    # Skalakan fitur menggunakan scaler yang telah dilatih
-    features_scaled = scaler.transform(features)
-    
-    # Prediksi setiap nilai NPK menggunakan model SVR
-    pred_n = svr_n.predict(features_scaled)[0]
-    pred_p = svr_p.predict(features_scaled)[0]
-    pred_k = svr_k.predict(features_scaled)[0]
+    for element in elements:
+        # Ekstrak fitur, skalakan, dan prediksi menggunakan model spesifik unsur
+        cnn_extractor = loaded_models[f'cnn_{element}']
+        scaler = loaded_models[f'scaler_{element}']
+        svr = loaded_models[f'svr_{element}']
+        
+        # Ekstrak fitur menggunakan CNN spesifik unsur
+        features = cnn_extractor.predict(img_preprocessed)
+        
+        # Skalakan fitur menggunakan scaler spesifik unsur
+        features_scaled = scaler.transform(features)
+        
+        # Prediksi menggunakan SVR spesifik unsur
+        pred = svr.predict(features_scaled)[0]
+        predictions[element.upper()] = pred # Simpan hasil dengan kunci N, P, K
 
-    return {"N": pred_n, "P": pred_p, "K": pred_k}
+    return predictions
 
 
 if __name__ == '__main__':
@@ -111,13 +138,12 @@ if __name__ == '__main__':
         print("\n--- Hasil Prediksi ---")
         print(f"Gambar: {os.path.basename(args.image)}")
         print(f"Model: {args.architecture}")
-        print(f"  > Prediksi Nitrogen (N): {predictions['N']:.2f}")
-        print(f"  > Prediksi Fosfor (P):   {predictions['P']:.2f}")
-        print(f"  > Prediksi Kalium (K):   {predictions['K']:.2f}")
+        print(f"  > Prediksi Nitrogen (N): {predictions['N']:.2f}")
+        print(f"  > Prediksi Fosfor (P):   {predictions['P']:.2f}")
+        print(f"  > Prediksi Kalium (K):   {predictions['K']:.2f}")
         print("------------------------")
 
-# Menggunakan model CustomCNN untuk memprediksi gambar dari folder data
-# python predict.py --image data/image1.jpg --architecture CustomCNN
-
-# Menggunakan model VGG16
-# python predict.py --image /path/to/another/test_image.jpg --architecture VGG16
+# python predict.py --image img_predict/7.jpg --architecture CustomCNN
+# python predict.py --image img_predict/7.jpg --architecture VGG16
+# python predict.py --image img_predict/7.jpg --architecture ResNet50
+# python predict.py --image img_predict/7.jpg --architecture InceptionV3

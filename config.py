@@ -8,6 +8,7 @@ DATA_FOLDER = 'data'
 IMAGES_SUBFOLDER = DATA_FOLDER
 CSV_FILE_PATH = os.path.join(DATA_FOLDER, 'label.csv')
 MODEL_SAVE_DIR = 'saved_models' # Folder untuk menyimpan semua model yang telah dilatih
+BEST_MODEL_DIR = 'best_models'
 
 # --- Konfigurasi Gambar ---
 IMAGE_HEIGHT = 224
@@ -24,7 +25,7 @@ COMMON_DROPOUT_RATE = 0.25
 # --- Konfigurasi Arsitektur ---
 # Ganti list ini untuk melatih arsitektur yang berbeda.
 # Pilihan: ["CustomCNN", "VGG16", "ResNet50", "InceptionV3"]
-MODEL_ARCHITECTURES = ["ResNet50"]
+MODEL_ARCHITECTURES = ["CustomCNN", "VGG16", "ResNet50", "InceptionV3"]
 
 # --- Konfigurasi Split Data ---
 TRAIN_SPLIT = 0.6
