@@ -1,0 +1,85 @@
+Custom CustomCNN
+
+Best hyperparameters for Nitrogen (N) (CustomCNN): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.1, 'kernel': 'poly'}
+Test MAE for Nitrogen (N) (CustomCNN): 3655.1538
+Test MSE for Nitrogen (N) (CustomCNN): 14995812.5163
+Test RMSE for Nitrogen (N) (CustomCNN): 3872.4427
+Test MAPE for Nitrogen (N) (CustomCNN): 39.76%
+
+Best hyperparameters for Fosfor (P) (CustomCNN): {'C': 0.1, 'epsilon': 0.15, 'gamma': 0.1, 'kernel': 'poly'}
+Test MAE for Fosfor (P) (CustomCNN): 6.2184
+Test MSE for Fosfor (P) (CustomCNN): 48.2826
+Test RMSE for Fosfor (P) (CustomCNN): 6.9486
+Test MAPE for Fosfor (P) (CustomCNN): 25.09%
+
+Best hyperparameters for Kalium (K) (CustomCNN): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+Test MAE for Kalium (K) (CustomCNN): 0.0196
+Test MSE for Kalium (K) (CustomCNN): 0.0004
+Test RMSE for Kalium (K) (CustomCNN): 0.0198
+Test MAPE for Kalium (K) (CustomCNN): 34.21%
+
+-----
+
+VGG16
+
+Best hyperparameters for Nitrogen (N) (CustomCNN): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+Test MAE for Nitrogen (N) (CustomCNN): 4100.0000
+Test MSE for Nitrogen (N) (CustomCNN): 17913333.2500
+Test RMSE for Nitrogen (N) (CustomCNN): 4232.4146
+Test MAPE for Nitrogen (N) (CustomCNN): 45.59%
+
+Best hyperparameters for Fosfor (P) (VGG16): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.001, 'kernel': 'linear'}
+Test MAE for Fosfor (P) (VGG16): 5.7154
+Test MSE for Fosfor (P) (VGG16): 55.6317
+Test RMSE for Fosfor (P) (VGG16): 7.4587
+Test MAPE for Fosfor (P) (VGG16): 23.85%
+
+Best hyperparameters for Kalium (K) (CustomCNN): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+Test MAE for Kalium (K) (CustomCNN): 0.0196
+Test MSE for Kalium (K) (CustomCNN): 0.0004
+Test RMSE for Kalium (K) (CustomCNN): 0.0198
+Test MAPE for Kalium (K) (CustomCNN): 34.21%
+
+-----
+
+ResNet50
+
+Best hyperparameters for Nitrogen (N) (ResNet50): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.1, 'kernel': 'poly'}
+Test MAE for Nitrogen (N) (ResNet50): 3797.4710
+Test MSE for Nitrogen (N) (ResNet50): 16539261.5478
+Test RMSE for Nitrogen (N) (ResNet50): 4066.8491
+Test MAPE for Nitrogen (N) (ResNet50): 40.11%
+
+Best hyperparameters for Fosfor (P) (ResNet50): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.001, 'kernel': 'linear'}
+Test MAE for Fosfor (P) (ResNet50): 5.5717
+Test MSE for Fosfor (P) (ResNet50): 41.9970
+Test RMSE for Fosfor (P) (ResNet50): 6.4805
+Test MAPE for Fosfor (P) (ResNet50): 22.91%
+
+Best hyperparameters for Kalium (K) (ResNet50): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+Test MAE for Kalium (K) (ResNet50): 0.0196
+Test MSE for Kalium (K) (ResNet50): 0.0004
+Test RMSE for Kalium (K) (ResNet50): 0.0198
+Test MAPE for Kalium (K) (ResNet50): 34.21%
+
+----
+
+InceptionV3
+
+Best hyperparameters for Nitrogen (N) (InceptionV3): {'C': 0.1, 'epsilon': 0.2, 'gamma': 0.001, 'kernel': 'linear'}
+Test MAE for Nitrogen (N) (InceptionV3): 4043.9583
+Test MSE for Nitrogen (N) (InceptionV3): 17369646.7238
+Test RMSE for Nitrogen (N) (InceptionV3): 4167.6908
+Test MAPE for Nitrogen (N) (InceptionV3): 45.15%
+
+Best hyperparameters for Fosfor (P) (InceptionV3): {'C': 0.1, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'linear'}
+Test MAE for Fosfor (P) (InceptionV3): 5.5689
+Test MSE for Fosfor (P) (InceptionV3): 35.6715
+Test RMSE for Fosfor (P) (InceptionV3): 5.9726
+Test MAPE for Fosfor (P) (InceptionV3): 22.33%
+
+Best hyperparameters for Kalium (K) (InceptionV3): {'C': 0.001, 'epsilon': 0.1, 'gamma': 0.001, 'kernel': 'rbf'}
+Test MAE for Kalium (K) (InceptionV3): 0.0196
+Test MSE for Kalium (K) (InceptionV3): 0.0004
+Test RMSE for Kalium (K) (InceptionV3): 0.0198
+Test MAPE for Kalium (K) (InceptionV3): 34.21%

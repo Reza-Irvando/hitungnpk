@@ -32,82 +32,53 @@ def get_preprocessing_function(architecture_name):
     else:
         raise ValueError(f"Arsitektur '{architecture_name}' tidak dikenali.")
 
-# --- FUNGSI BARU UNTUK VISUALISASI GRAD-CAM (TERMASUK REVISI) ---
 def generate_gradcam_on_feature(model_extractor, img_array_expanded, element_name, target_feature_index, last_conv_layer_name, architecture_name):
-    """
-    Menghasilkan heatmap Grad-CAM yang menunjukkan area gambar mana
-    yang paling mengaktifkan fitur laten tertentu (target_feature_index).
-    """
     element = element_name.upper()
     print(f"\nGenerasi Grad-CAM untuk {element} (Target Fitur Laten: {target_feature_index})...")
 
-    # 1. Dapatkan model yang menghasilkan output dari lapisan konvolusi terakhir dan fitur laten
     grad_model = tf.keras.models.Model(
         [model_extractor.inputs],
         [model_extractor.get_layer(last_conv_layer_name).output, model_extractor.output]
     )
 
-    # 2. Hitung gradien
     with tf.GradientTape() as tape:
         last_conv_output, feature_output = grad_model(img_array_expanded)
-        # Targetkan output yang ingin dijelaskan (fitur laten spesifik)
         target_output = feature_output[:, target_feature_index]
     
-    # Gradien dari fitur laten spesifik terhadap output lapisan konvolusi terakhir
     grads = tape.gradient(target_output, last_conv_output)
-
-    # Vektor rata-rata gradien (bobot aktivasi)
     pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
-
-    # 3. Hitung Heatmap
     last_conv_output = last_conv_output[0]
     heatmap = last_conv_output @ pooled_grads[..., tf.newaxis]
     heatmap = tf.squeeze(heatmap)
 
-    # Normalisasi heatmap (0-1) dan penanganan RuntimeWarning
     max_heatmap = tf.math.reduce_max(heatmap)
     if max_heatmap > 0:
         heatmap = tf.maximum(heatmap, 0) / max_heatmap
     else:
-        # Jika semua nilai nol, set heatmap ke nol
         heatmap = tf.zeros_like(heatmap)
         
     heatmap = heatmap.numpy()
 
-    # 4. Visualisasi (TERMASUK PERBAIKAN PENANGANAN GAMBAR)
-    
-    # Muat gambar input yang sudah diproses
     img = np.squeeze(img_array_expanded)
     
-    # Normalisasi untuk tampilan (skala 0-1)
     if img.max() > 1.0:
-         # Asumsi input adalah [0, 255] jika max > 1.0
-         img_display = img.astype('float32') / 255.0
+        img_display = img.astype('float32') / 255.0
     else:
-         # Asumsi input sudah [0, 1] jika max <= 1.0
-         img_display = img
+        img_display = img
     
-    # Resize heatmap ke ukuran gambar asli
     heatmap_resized = cv2.resize(heatmap, (img_display.shape[1], img_display.shape[0]))
     
-    # Ubah skala heatmap ke 0-255 dan aplikasikan colormap
     heatmap_resized = np.uint8(255 * heatmap_resized) 
     heatmap_colored = cv2.applyColorMap(heatmap_resized, cv2.COLORMAP_JET)
 
-    # Overlay heatmap pada gambar asli
-    # Kedua elemen harus diskalakan ke 0-255 untuk operasi overlay
     superimposed_img = heatmap_colored * 0.4 + img_display * 255 * 0.6 
     superimposed_img = np.clip(superimposed_img, 0, 255).astype('uint8')
 
     plt.figure(figsize=(8, 8))
-    # Konversi dari BGR (output OpenCV colormap) ke RGB (ekspektasi Matplotlib)
     plt.imshow(cv2.cvtColor(superimposed_img, cv2.COLOR_BGR2RGB))
-    # 'architecture_name' sekarang tersedia
     plt.title(f"Grad-CAM {element} (Aktivasi Fitur Laten {target_feature_index}) - {architecture_name}")
     plt.axis('off')
     plt.show()
-
-# --- AKHIR FUNGSI GRAD-CAM ---
 
 def predict_npk(image_path, architecture_name):
     """
@@ -228,45 +199,3 @@ def predict_npk(image_path, architecture_name):
         }
 
     return predictions, interpretation_data
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Prediksi NPK dari gambar menggunakan model terlatih.")
-    parser.add_argument("--image", type=str, required=True, help="Path ke gambar yang akan diprediksi.")
-    parser.add_argument("--architecture", type=str, required=True, choices=config.MODEL_ARCHITECTURES,
-                        help="Arsitektur CNN yang modelnya akan digunakan.")
-    
-    args = parser.parse_args()
-
-    predictions, interpretation_data = predict_npk(args.image, args.architecture)
-
-    if predictions:
-        print("\n--- Hasil Prediksi ---")
-        print(f"Gambar: {os.path.basename(args.image)}")
-        print(f"Model: {args.architecture}")
-        print(f"  > Prediksi Nitrogen (N): {predictions['N']:.2f}")
-        print(f"  > Prediksi Fosfor (P):   {predictions['P']:.2f}")
-        print(f"  > Prediksi Kalium (K):   {predictions['K']:.2f}")
-        print("------------------------")
-        
-        # --- Visualisasi Grad-CAM pada Fitur Laten ---
-        elements = ['n', 'p', 'k']
-        
-        for element in elements:
-            data = interpretation_data[element]
-            
-            if data['last_conv_layer_name'] is None:
-                print(f"Peringatan: Tidak dapat melakukan Grad-CAM untuk {args.architecture}. Nama lapisan konvolusi terakhir tidak diketahui.")
-                continue
-
-            # TARGET_FEATURE_INDEX diambil secara dinamis dari fitur yang memiliki aktivasi absolut tertinggi
-            TARGET_FEATURE_INDEX = data['target_feature_index'] 
-
-            generate_gradcam_on_feature(
-                model_extractor=data['cnn_extractor'],
-                img_array_expanded=data['img_array_expanded'],
-                element_name=element,
-                target_feature_index=TARGET_FEATURE_INDEX,
-                last_conv_layer_name=data['last_conv_layer_name'],
-                architecture_name=args.architecture
-            )
